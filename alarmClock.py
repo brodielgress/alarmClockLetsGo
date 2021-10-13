@@ -1,4 +1,19 @@
 import datetime
+
 now = datetime.datetime.now()
-print ("Current date and time: ")
-print (now.strfrtime("%Y-%m-%d %H:%M:%S"))
+display_time = now.strftime("%H:%M:%S")
+
+def convert_user_time():
+    #todo Figure out how to convert user's input into datetime format: https://www.educative.io/edpresso/how-to-convert-a-string-to-a-date-in-python
+    pass
+
+def time_check():
+    #todo Check out timezone import.
+    converted_time = convert_user_time()
+    if converted_time == now:
+        print("Wake up!")
+    else:
+        print(display_time)
+        print("zzz...")
+    
+time_check()
