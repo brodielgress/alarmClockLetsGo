@@ -3,10 +3,6 @@ from datetime import datetime
 now = datetime.now()
 display_time = now.strftime('%H:%M')
 
-    #todo create a function to allow a user to input a time for alarm
-def user_inputs_alarm():
-    pass
-
     #todo Figure out how to convert user's input into datetime format: https://www.educative.io/edpresso/how-to-convert-a-string-to-a-date-in-python
 def convert_user_time():
     user_input_str = str(input('Please enter a time for your alarm(yyyy-mm-dd HH:MM): '))
