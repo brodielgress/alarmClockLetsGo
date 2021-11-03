@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 
 now = datetime.now()
 display_time = now.strftime('%H:%M')
