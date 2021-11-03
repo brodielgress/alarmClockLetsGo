@@ -1,7 +1,7 @@
 def main():
-    number = randrange(100)
+    number = (57)
     while True:
-        guess = int(input("? ))
+        guess = int(input("?"))
         if guess == number:
             print("You win!")
             break
