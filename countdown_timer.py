@@ -1,6 +1,6 @@
 import time
-from alarm_clock import convert_user_time
 
+#todo Figure out how to connect countdown_timer to alarm_clock
 def countdown_timer(t):
     while t:
         mins, secs = divmod(t, 60)
