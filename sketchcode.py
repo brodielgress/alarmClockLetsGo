@@ -36,3 +36,9 @@ def countdown_timer(t):
     return t
 
 countdown_timer(int(how_many_seconds_left))
+
+#todo Make exit option for alarm
+
+#todo Make display time tick down like alarm before user inputs alarm
+
+#todo Allow user to set multiple alarms
