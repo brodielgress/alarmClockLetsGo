@@ -2,13 +2,8 @@ from datetime import datetime
 import time
 
 def print_menu():
-    print()
-    print('|oooooooooooooo|')
-    print('|      My      |')
-    print('|    Alarm     |')
-    print('|     App      |')
-    print('|oooooooooooooo|')
-    print('* * * * * * * * *')
+    print('Time to set an alarm!')
+    print('---------------------')
     print('Please select an option:')
     print()
     print('1) Set an alarm')
@@ -18,7 +13,7 @@ def print_menu():
 def handle_choice():
     choice = input('Choice: ')
     if choice == '1':
-        get_user_time()
+        countdown_timer(int(check_alarm()))
     elif choice == '2':
         now = datetime.now()
         display_time = now.strftime('%H:%M:%S')
@@ -27,7 +22,7 @@ def handle_choice():
     elif choice == '3':
         return False
     else:
-        print('Invalid option, please try again.')
+        print('Invalid option; please try again.')
         handle_choice()
 
 now = datetime.now()
@@ -46,8 +41,9 @@ def get_sec(time_str):
     return s
 
 def check_alarm():
+    user_alarm_time = get_user_time()
     day_seconds = epoch_seconds - get_sec(alarm_time)
-    alarm_seconds = day_seconds + get_sec(get_user_time())
+    alarm_seconds = day_seconds + get_sec(user_alarm_time)
     how_many_seconds_left = alarm_seconds - epoch_seconds
     if how_many_seconds_left < 0:
         print('Please enter a future time.')
@@ -60,15 +56,17 @@ def countdown_timer(t):
         print("You have", timer, "until your alarm.", end="\r")
         time.sleep(1)
         t -= 1
-
-    print('\033[K','Wake up!')
+        cancel = input('\n Type cancel to exit: ')
+        if cancel == 'cancel':
+            break
+        else:
+            print('\033[K','Wake up!')
     return t
 
 def main():
     print_menu()
     while handle_choice():
         print_menu()
-        countdown_timer(int(check_alarm()))
 
 main()
 
