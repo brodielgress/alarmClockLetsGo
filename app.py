@@ -5,9 +5,8 @@ now = datetime.now()
 display_time = now.strftime('%H:%M:%S')
 print('The time now is', display_time)
 
-def convert_user_time():
+def get_user_time():
     user_input_str = str(input('Please enter a time for your alarm(HH:MM:SS): '))
-    print ('Your set alarm time is', user_input_str)
     return user_input_str
 
 now = datetime.now()
@@ -21,7 +20,7 @@ def get_sec(time_str):
     return s
 
 day_seconds = epoch_seconds - get_sec(alarm_time)
-alarm_seconds = day_seconds + get_sec(convert_user_time())
+alarm_seconds = day_seconds + get_sec(get_user_time())
 how_many_seconds_left = alarm_seconds - epoch_seconds
 
 def countdown_timer(t):

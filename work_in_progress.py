@@ -1,35 +1,44 @@
 from datetime import datetime
 import time
 
-# def display_time(t):
-#     while t:
-#         now = datetime.now()
-#         current_time = now.strftime('%H:%M:%S')
-#         print('The time now is', current_time, end="\r")
-#         if t == 1:
-#             break
-#     return current_time
+def print_menu():
+    print()
+    print('|oooooooooooooo|')
+    print('|      My      |')
+    print('|    Alarm     |')
+    print('|     App      |')
+    print('|oooooooooooooo|')
+    print('* * * * * * * * *')
+    print('Please select an option:')
+    print()
+    print('1) Set an alarm')
+    print('2) Check the time')
+    print('3) Exit')
 
-def clock():
-    t = ''
-    while t == '':
-        print('The time is', datetime.now().strftime("%H:%M:%S"), end="\r")
-        time.sleep(1)
-        if t != '':
-            break
-
-def get_user_time():
-    clock()
-    user_input_str = str(input('Please enter a time for your alarm(HH:MM:SS): '))
-    t = 'a'
-    return user_input_str
-
-get_user_time()
+def handle_choice():
+    choice = input('Choice: ')
+    if choice == '1':
+        get_user_time()
+    elif choice == '2':
+        now = datetime.now()
+        display_time = now.strftime('%H:%M:%S')
+        print('The time now is', display_time)
+        handle_choice()
+    elif choice == '3':
+        return False
+    else:
+        print('Invalid option, please try again.')
+        handle_choice()
 
 now = datetime.now()
 alarm_time = now.strftime('%H:%M:%S')
 m = time.localtime()
 epoch_seconds = time.mktime(m)
+
+def get_user_time():
+    user_input_str = str(input('Please enter a time for your alarm(HH:MM:SS): '))
+    print('Your alarm is set to', user_input_str)
+    return user_input_str
 
 def get_sec(time_str):
     h, m, s = time_str.split(':')
@@ -42,23 +51,26 @@ def check_alarm():
     how_many_seconds_left = alarm_seconds - epoch_seconds
     if how_many_seconds_left < 0:
         print('Please enter a future time.')
-    else:
-        print ('Your set alarm time is', get_user_time())
-        return how_many_seconds_left
+    return how_many_seconds_left
 
 def countdown_timer(t):
     while t:
         mins, secs = divmod(t, 60)
         timer = '{:02d}:{:02d}'.format(mins, secs)
-        print("You have", timer, "until your alarm goes.", end="\r")
+        print("You have", timer, "until your alarm.", end="\r")
         time.sleep(1)
         t -= 1
+
     print('\033[K','Wake up!')
     return t
 
-countdown_timer(int(check_alarm()))
+def main():
+    print_menu()
+    while handle_choice():
+        print_menu()
+        countdown_timer(int(check_alarm()))
 
-#todo Make exit option for alarm
+main()
 
 #todo Make display time tick down like alarm before user inputs alarm
 
