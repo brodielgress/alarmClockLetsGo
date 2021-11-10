@@ -65,9 +65,3 @@ def main():
         print_menu()
 
 main()
-
-#todo Fix math for alarm set
-
-#todo Make display time tick down like alarm before user inputs alarm
-
-#todo Allow user to set multiple alarms

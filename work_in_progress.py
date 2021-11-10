@@ -1,5 +1,6 @@
 from datetime import datetime
 import time
+import re
 
 def print_menu():
     print('Time to set an alarm!')
@@ -25,15 +26,20 @@ def handle_choice():
         print('Invalid option; please try again.')
         handle_choice()
 
-now = datetime.now()
-alarm_time = now.strftime('%H:%M:%S')
-m = time.localtime()
-epoch_seconds = time.mktime(m)
-
 def get_user_time():
-    user_input_str = str(input('Please enter a time for your alarm(HH:MM:SS): '))
-    print('Your alarm is set to', user_input_str)
-    return user_input_str
+    print('Please enter your time in 24-hr format! (e.g. 13:00, not 1:00)')
+    print('Type cancel to exit.')
+    user_input_str = str(input('HH:MM:SS: '))
+    if user_input_str == 'cancel':
+        
+        main()
+    elif re.match('\d{2}:\d{2}:\d{2}', user_input_str):
+        print('Your alarm is set to', user_input_str)
+        h, m, s = user_input_str.split(':')
+        s = int(h) * 3600 + int(m) * 60 + int(s)
+        return user_input_str
+    else:
+        raise TypeError('Invalid time; please try again.')
 
 def get_sec(time_str):
     h, m, s = time_str.split(':')
@@ -41,26 +47,35 @@ def get_sec(time_str):
     return s
 
 def check_alarm():
+    now = datetime.now()
+    alarm_time = now.strftime('%H:%M:%S')
+    m = time.localtime()
+    epoch_seconds = time.mktime(m)
+
     user_alarm_time = get_user_time()
     day_seconds = epoch_seconds - get_sec(alarm_time)
     alarm_seconds = day_seconds + get_sec(user_alarm_time)
     how_many_seconds_left = alarm_seconds - epoch_seconds
-    if how_many_seconds_left < 0:
-        print('Please enter a future time.')
     return how_many_seconds_left
 
 def countdown_timer(t):
     while t:
         mins, secs = divmod(t, 60)
-        timer = '{:02d}:{:02d}'.format(mins, secs)
-        print("You have", timer, "until your alarm.", end="\r")
-        time.sleep(1)
-        t -= 1
-        cancel = input('\n Type cancel to exit: ')
-        if cancel == 'cancel':
-            break
+        hrs, mins = divmod(mins, 60)
+        timer = '{:02d}:{:02d}:{:02d}'.format(hrs, mins, secs)
+        if t > 0:
+            print("You have", timer, "until your alarm.", end="\r")
+            time.sleep(1)
+            t -= 1
+        elif t < 0:
+            t = t + 86400
+            print("You have", timer, "until your alarm.", end="\r")
+            time.sleep(1)
+            t -= 1
         else:
-            print('\033[K','Wake up!')
+            print('Invalid option; please try again.')
+            handle_choice()    
+    print('\033[K','Wake up!')
     return t
 
 def main():
