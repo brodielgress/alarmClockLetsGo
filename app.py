@@ -27,11 +27,10 @@ def handle_choice():
         handle_choice()
 
 def get_user_time():
-    print('Please enter your time in 24-hr format! (e.g. 13:00, not 1:00)')
+    print('Please enter your time in 24-hr format! (e.g. 13:00:00, not 1:00:00)')
     print('Type cancel to exit.')
     user_input_str = str(input('HH:MM:SS: '))
     if user_input_str == 'cancel':
-        
         main()
     elif re.match('\d{2}:\d{2}:\d{2}', user_input_str):
         print('Your alarm is set to', user_input_str)
@@ -39,7 +38,7 @@ def get_user_time():
         s = int(h) * 3600 + int(m) * 60 + int(s)
         return user_input_str
     else:
-        raise TypeError('Invalid time; please try again.')
+        print('Invalid time; please try again.')
 
 def get_sec(time_str):
     h, m, s = time_str.split(':')
