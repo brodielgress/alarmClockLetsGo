@@ -11,10 +11,13 @@ def print_menu():
     print('2) Check the time')
     print('3) Exit')
 
+
+
 def handle_choice():
     choice = input('Choice: ')
     if choice == '1':
         countdown_timer(int(check_alarm()))
+        handle_choice()
     elif choice == '2':
         now = datetime.now()
         display_time = now.strftime('%H:%M:%S')

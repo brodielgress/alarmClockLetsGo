@@ -1,20 +1,23 @@
 from datetime import datetime
 import time
 import re
+import threading
 
 def print_menu():
     print('Time to set an alarm!')
     print('---------------------')
     print('Please select an option:')
-    print()
+
+def handle_choice():
     print('1) Set an alarm')
     print('2) Check the time')
     print('3) Exit')
-
-def handle_choice():
     choice = input('Choice: ')
     if choice == '1':
-        countdown_timer(int(check_alarm()))
+        thread_one = threading.Thread(target=countdown_timer(int(check_alarm())), args=(1,), daemon=True)
+        thread_two = thread_two = threading.Thread(target=handle_choice(), args=(1,))
+        thread_one.start()
+        thread_two.start()
     elif choice == '2':
         now = datetime.now()
         display_time = now.strftime('%H:%M:%S')
@@ -31,8 +34,7 @@ def get_user_time():
     print('Type cancel to exit.')
     user_input_str = str(input('HH:MM:SS: '))
     if user_input_str == 'cancel':
-        
-        main()
+        handle_choice()
     elif re.match('\d{2}:\d{2}:\d{2}', user_input_str):
         print('Your alarm is set to', user_input_str)
         h, m, s = user_input_str.split(':')
@@ -60,21 +62,24 @@ def check_alarm():
 
 def countdown_timer(t):
     while t:
-        mins, secs = divmod(t, 60)
-        hrs, mins = divmod(mins, 60)
-        timer = '{:02d}:{:02d}:{:02d}'.format(hrs, mins, secs)
-        if t > 0:
-            print("You have", timer, "until your alarm.", end="\r")
-            time.sleep(1)
-            t -= 1
-        elif t < 0:
-            t = t + 86400
-            print("You have", timer, "until your alarm.", end="\r")
-            time.sleep(1)
-            t -= 1
+        if t == 'cancel':
+            return False
         else:
-            print('Invalid option; please try again.')
-            handle_choice()    
+            mins, secs = divmod(t, 60)
+            hrs, mins = divmod(mins, 60)
+            timer = '{:02d}:{:02d}:{:02d}'.format(hrs, mins, secs)
+            if t > 0:
+                print("You have", timer, "until your alarm.", end="\r")
+                time.sleep(1)
+                t -= 1
+            elif t < 0:
+                t = t + 86400
+                print("You have", timer, "until your alarm.", end="\r")
+                time.sleep(1)
+                t -= 1
+            else:
+                print('Invalid option; please try again.')
+                handle_choice()
     print('\033[K','Wake up!')
     return t
 

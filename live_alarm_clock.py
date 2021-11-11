@@ -1,28 +1,33 @@
-from threading import Thread
-from datetime import datetime
+import logging
+import threading
 import time
 
-thread_running = True
-
-def clock():
-    global thread_running
-
-    while thread_running:
+def worker(arg):
+    while not arg["stop"]:
+        logging.debug("worker thread checking in")
         time.sleep(1)
-        if thread_running == True:
-            print(datetime.now().strftime("%H:%M:%S"), end="\r")
 
-def get_user_time():
-    user_input_str = str(input('\n Please enter a time for your alarm(HH:MM:SS): '))
-    print('Your alarm is set to ', user_input_str)
-    return user_input_str
+def main():
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(relativeCreated)6d %(threadName)s %(message)s"
+    )
+    info = {"stop": False}
+    thread = threading.Thread(target=worker, args=(info,))
+    thread_two = threading.Thread(target=worker, args=(info,))
+    thread.start()
+    thread_two.start()
 
-if __name__ == '__main__':
-    t1 = Thread(target=get_user_time)
-    t2 = Thread(target=clock)
+    while True:
+        try:
+            logging.debug("Checking in from main thread")
+            time.sleep(0.75)
+        except KeyboardInterrupt:
+            info["stop"] = True
+            logging.debug('Stopping')
+            break
+    thread.join()
+    thread_two.join()
 
-    t1.start()
-    t2.start()
-
-    t2.join()
-    thread_running = False
+if __name__ == "__main__":
+    main()
