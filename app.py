@@ -1,6 +1,17 @@
 from datetime import datetime
 import time
 import re
+import logging
+
+# DEBUG: Detailed information, typically of interest only when diagnosing problems.
+
+# INFO: Confirmation that things are working as expected.
+
+# WARNING: An indication that something unexpected happened, or indicative of some problem in the near future (e.g. ‘disk space low’). The software is still working as expected.
+
+# ERROR: Due to a more serious problem, the software has not been able to perform some function.
+
+# CRITICAL: A serious error, indicating that the program itself may be unable to continue running.
 
 def print_menu():
     print('Time to set an alarm!')
@@ -11,13 +22,11 @@ def print_menu():
     print('2) Check the time')
     print('3) Exit')
 
-
-
 def handle_choice():
     choice = input('Choice: ')
     if choice == '1':
         countdown_timer(int(check_alarm()))
-        handle_choice()
+        main()
     elif choice == '2':
         now = datetime.now()
         display_time = now.strftime('%H:%M:%S')
@@ -26,14 +35,15 @@ def handle_choice():
     elif choice == '3':
         return False
     else:
-        print('Invalid option; please try again.')
-        handle_choice()
+        logging.error('Invalid option; please try again.')
+        main()
 
 def get_user_time():
     print('Please enter your time in 24-hr format! (e.g. 13:00:00, not 1:00:00)')
     print('Type cancel to exit.')
     user_input_str = str(input('HH:MM:SS: '))
     if user_input_str == 'cancel':
+        user_input_str = datetime.now()
         main()
     elif re.match('\d{2}:\d{2}:\d{2}', user_input_str):
         print('Your alarm is set to', user_input_str)
@@ -41,7 +51,8 @@ def get_user_time():
         s = int(h) * 3600 + int(m) * 60 + int(s)
         return user_input_str
     else:
-        print('Invalid time; please try again.')
+        logging.error('Invalid time; please try again')
+        main()
 
 def get_sec(time_str):
     h, m, s = time_str.split(':')
@@ -58,6 +69,8 @@ def check_alarm():
     day_seconds = epoch_seconds - get_sec(alarm_time)
     alarm_seconds = day_seconds + get_sec(user_alarm_time)
     how_many_seconds_left = alarm_seconds - epoch_seconds
+    if how_many_seconds_left < 0:
+        how_many_seconds_left = how_many_seconds_left + 86400
     return how_many_seconds_left
 
 def countdown_timer(t):
@@ -69,15 +82,11 @@ def countdown_timer(t):
             print("You have", timer, "until your alarm.", end="\r")
             time.sleep(1)
             t -= 1
-        elif t < 0:
-            t = t + 86400
-            print("You have", timer, "until your alarm.", end="\r")
-            time.sleep(1)
-            t -= 1
         else:
             print('Invalid option; please try again.')
-            handle_choice()    
+            main() 
     print('\033[K','Wake up!')
+    main()
     return t
 
 def main():
