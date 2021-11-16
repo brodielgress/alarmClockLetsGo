@@ -3,16 +3,6 @@ import time
 import re
 import logging
 
-# DEBUG: Detailed information, typically of interest only when diagnosing problems.
-
-# INFO: Confirmation that things are working as expected.
-
-# WARNING: An indication that something unexpected happened, or indicative of some problem in the near future (e.g. ‘disk space low’). The software is still working as expected.
-
-# ERROR: Due to a more serious problem, the software has not been able to perform some function.
-
-# CRITICAL: A serious error, indicating that the program itself may be unable to continue running.
-
 def print_menu():
     print('Time to set an alarm!')
     print('---------------------')
@@ -25,8 +15,7 @@ def print_menu():
 def handle_choice():
     choice = input('Choice: ')
     if choice == '1':
-        countdown_timer(int(check_alarm()))
-        main()
+        get_user_time()
     elif choice == '2':
         now = datetime.now()
         display_time = now.strftime('%H:%M:%S')
@@ -35,23 +24,37 @@ def handle_choice():
     elif choice == '3':
         return False
     else:
-        logging.error('Invalid option; please try again.')
+        error_A = [choice, ' is an invalid option; please try again.']
+        logging.error(f'{choice} is an invalid option; please try again.')
+        with open('error.txt', 'a') as f:
+            f.write(time.ctime())
+            f.write('\n')
+            f.writelines(error_A)
+            f.write('\n')
+            f.write('\n')
         main()
 
 def get_user_time():
     print('Please enter your time in 24-hr format! (e.g. 13:00:00, not 1:00:00)')
     print('Type cancel to exit.')
-    user_input_str = str(input('HH:MM:SS: '))
+    user_input_str = input('HH:MM:SS: ')
     if user_input_str == 'cancel':
-        user_input_str = datetime.now()
         main()
     elif re.match('\d{2}:\d{2}:\d{2}', user_input_str):
         print('Your alarm is set to', user_input_str)
         h, m, s = user_input_str.split(':')
         s = int(h) * 3600 + int(m) * 60 + int(s)
+        countdown_timer(int(check_alarm(user_input_str)))
         return user_input_str
     else:
-        logging.error('Invalid time; please try again')
+        error_B = [user_input_str, ' is an invalid option; please try again.']
+        logging.error(f'{user_input_str} is an invalid option; please try again.')
+        with open('error.txt', 'a') as g:
+            g.write(time.ctime())
+            g.write('\n')
+            g.writelines(error_B)
+            g.write('\n')
+            g.write('\n')
         main()
 
 def get_sec(time_str):
@@ -59,13 +62,13 @@ def get_sec(time_str):
     s = int(h) * 3600 + int(m) * 60 + int(s)
     return s
 
-def check_alarm():
+def check_alarm(t):
     now = datetime.now()
     alarm_time = now.strftime('%H:%M:%S')
     m = time.localtime()
     epoch_seconds = time.mktime(m)
 
-    user_alarm_time = get_user_time()
+    user_alarm_time = t
     day_seconds = epoch_seconds - get_sec(alarm_time)
     alarm_seconds = day_seconds + get_sec(user_alarm_time)
     how_many_seconds_left = alarm_seconds - epoch_seconds
