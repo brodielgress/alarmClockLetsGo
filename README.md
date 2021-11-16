@@ -8,7 +8,7 @@ Hello! Welcome to my alarm clock app, a simple alarm clock that ticks down the t
 
 ## Python Features
 
-###### 1. Master Loop
+### 1. Master Loop
 (Implement a “master loop” console application where the user can repeatedly enter commands/perform actions, including choosing to exit the program.)
 
 The user has three options upon startup; the user can either 1) input a time, 2) check the current time, or 3) exit the program. If the user selects 1), the user can then either enter an alarm time that's formatted 24-hr style (##:##:##), or they can center 'cancel' to exit the input.
