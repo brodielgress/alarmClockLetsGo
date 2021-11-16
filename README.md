@@ -16,12 +16,12 @@ The user has three options upon startup; the user can either 1) input a time, 2)
 There's no way to cancel the alarm once it's been set; check incomplete code.
 
 
-###### 2. Countdown Timer
+### 2. Countdown Timer
 (Calculate and display data based on an external factor (ex: get the current date, and display how many days remaining until some event.)
 
 I use the datetime module several times in this app, to calculate the current time and create an effective timer. The user also has the ability to view the current time by selecting option 2 from the first menu.
 
-###### 3. Regular Expression - Timer
+### 3. Regular Expression - Timer
 (Implement a regular expression (regex) to ensure a field either a phone number or an email address 
 is always stored and displayed in the same format.)
 
@@ -29,13 +29,13 @@ I imported re to help check whether the user inputs an appropriate alarm time th
 
 ## Other Python Features
 
-###### 4. Logging errors
+### 4. Logging errors
 
 (Implement a log that records errors, invalid inputs, or other important events and writes them to a text file.)
 
 This is here to log and record errors when users input incorrect options, such as a wrong choice or time. The log records the errors into the error.txt file as well. I think I should probably separate errors meant for the coder from errors meant for the user, however.
 
-## Incomplete Code
+### Incomplete Code
 
 When the user enters an appropriate alarm, the alarm begins ticking down, but I couldn't figure out how to let the user input a command to cancel the alarm while the alarm is ticking down. I tried to use import threading code, and it was able to read a commmand and input it later, but the problem was that the input was covered by the ticking alarm. Using '\n' just made the code enter a new line over and over again. I'm not sure if the terminal allows the user to input new commands while another code is still running. More research is required.
 
