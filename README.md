@@ -3,7 +3,7 @@
 Hello! Welcome to my alarm clock app, a simple alarm clock that ticks down the time until you wake up.
 
 **Instructions:**
-1. open a terminal (either Powershell or the command prompt are recommended) and type "python app.py" to launch it. 
+1. Open a terminal (either Powershell or the command prompt are recommended) and type "python app.py" to launch it. 
 2. Do NOT use work_in_progress.py, nor error.txt. The former was how I tested new code out, while the latter is a record of errors.
 
 
