@@ -1,8 +1,10 @@
+#Here are my imports.
 from datetime import datetime
 import time
 import re
 import logging
 
+#This shows the user their options from the main menu.
 def print_menu():
     print('Time to set an alarm!')
     print('---------------------')
@@ -12,6 +14,7 @@ def print_menu():
     print('2) Check the time')
     print('3) Exit')
 
+#This function creates the options for the user to set an alarm, check the time, or exit.
 def handle_choice():
     choice = input('Choice: ')
     if choice == '1':
@@ -25,6 +28,7 @@ def handle_choice():
         return False
     else:
         error_A = [choice, ' is an invalid option; please try again.']
+#The logging code here writes errors to the error.txt file, in case the user inputs something incorrect.
         logging.error(f'{choice} is an invalid option; please try again.')
         with open('error.txt', 'a') as f:
             f.write(time.ctime())
@@ -34,6 +38,7 @@ def handle_choice():
             f.write('\n')
         main()
 
+#This function handles the user's inputted time, and allows the user to exit the input if they change their mind.
 def get_user_time():
     print('Please enter your time in 24-hr format! (e.g. 13:00:00, not 1:00:00)')
     print('Type cancel to exit.')
@@ -48,6 +53,7 @@ def get_user_time():
         return user_input_str
     else:
         error_B = [user_input_str, ' is an invalid option; please try again.']
+#The logging code here writes errors to the error.txt file, in case the user inputs something incorrect.
         logging.error(f'{user_input_str} is an invalid option; please try again.')
         with open('error.txt', 'a') as g:
             g.write(time.ctime())
@@ -57,11 +63,13 @@ def get_user_time():
             g.write('\n')
         main()
 
+#This function changes the user's inputted time into a quantity of seconds, so it can play nicely with the 'now' quantity of seconds.
 def get_sec(time_str):
     h, m, s = time_str.split(':')
     s = int(h) * 3600 + int(m) * 60 + int(s)
     return s
 
+#I think I need to refactor this, but it ensures that the countdown is a positive number, in case the user enters an alarm for the next day.
 def check_alarm(t):
     now = datetime.now()
     alarm_time = now.strftime('%H:%M:%S')
@@ -76,6 +84,7 @@ def check_alarm(t):
         how_many_seconds_left = how_many_seconds_left + 86400
     return how_many_seconds_left
 
+#This creates the countdown timer the user sees on the terminal. There is no escape.
 def countdown_timer(t):
     while t:
         mins, secs = divmod(t, 60)
@@ -92,6 +101,7 @@ def countdown_timer(t):
     main()
     return t
 
+#This is the main function over all the code.
 def main():
     print_menu()
     while handle_choice():
